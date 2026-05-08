@@ -1,3 +1,7 @@
+-- Script de base de datos para customer-service.
+-- Estrategia de entrega: cada microservicio mantiene su propio BaseDatos.sql.
+-- En Docker Compose se ejecuta al inicializar el contenedor PostgreSQL customer-db.
+
 CREATE DATABASE customer_db;
 
 \c customer_db;

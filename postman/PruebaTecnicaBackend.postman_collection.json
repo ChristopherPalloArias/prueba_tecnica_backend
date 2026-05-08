@@ -1,0 +1,584 @@
+{
+  "info": {
+    "name": "Prueba Tecnica Backend",
+    "_postman_id": "f3a58d7d-821d-4a85-9bd7-8cf1da4d0a01",
+    "description": "Coleccion para probar customer-service y account-service de la prueba tecnica backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "customerBaseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "accountBaseUrl",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "clienteId",
+      "value": "CLI-001"
+    },
+    {
+      "key": "numeroCuenta",
+      "value": "478758"
+    },
+    {
+      "key": "cuentaId",
+      "value": "1"
+    },
+    {
+      "key": "movimientoId",
+      "value": "1"
+    },
+    {
+      "key": "fechaInicio",
+      "value": "2026-01-01"
+    },
+    {
+      "key": "fechaFin",
+      "value": "2026-12-31"
+    }
+  ],
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Crear cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('clienteId', data.clienteId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"Masculino\",\n  \"edad\": 32,\n  \"identificacion\": \"1234567890\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"0999999999\",\n  \"contrasena\": \"Temporal123\"\n}"
+            },
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener cliente por clienteId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jose Lema Actualizado\",\n  \"genero\": \"Masculino\",\n  \"edad\": 33,\n  \"identificacion\": \"1234567890\",\n  \"direccion\": \"Amazonas y Naciones Unidas\",\n  \"telefono\": \"0988888888\",\n  \"contrasena\": \"Temporal456\"\n}"
+            },
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cambiar estado cliente",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}/estado",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}",
+                "estado"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Borrar logico cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cuentas",
+      "item": [
+        {
+          "name": "Crear cuenta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('cuentaId', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"{{numeroCuenta}}\",\n  \"tipoCuenta\": \"Ahorro\",\n  \"saldoInicial\": 2000.00,\n  \"clienteId\": \"{{clienteId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar cuentas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener cuenta por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar cuenta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoCuenta\": \"Corriente\"\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cambiar estado cuenta",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}/estado",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}",
+                "estado"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Borrar logico cuenta",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movimientos",
+      "item": [
+        {
+          "name": "Crear deposito",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('movimientoId', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"valor\": 500.00\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear retiro valido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('movimientoId', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"valor\": -575.00\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear retiro sin saldo suficiente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"valor\": -999999.00\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar movimientos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener movimiento por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos/{{movimientoId}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos",
+                "{{movimientoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar metadata movimiento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Movimiento revisado para prueba tecnica\"\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos/{{movimientoId}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos",
+                "{{movimientoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cambiar estado movimiento",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos/{{movimientoId}}/estado",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos",
+                "{{movimientoId}}",
+                "estado"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Borrar logico movimiento",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos/{{movimientoId}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos",
+                "{{movimientoId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Consultar reporte por cliente y rango de fechas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/reportes?clienteId={{clienteId}}&fechaInicio={{fechaInicio}}&fechaFin={{fechaFin}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "clienteId",
+                  "value": "{{clienteId}}"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "{{fechaInicio}}"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "{{fechaFin}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

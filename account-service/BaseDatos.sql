@@ -1,3 +1,7 @@
+-- Script de base de datos para account-service.
+-- Estrategia de entrega: cada microservicio mantiene su propio BaseDatos.sql.
+-- En Docker Compose se ejecuta al inicializar el contenedor PostgreSQL account-db.
+
 CREATE DATABASE account_db;
 
 \c account_db;
