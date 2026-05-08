@@ -1,0 +1,5 @@
+com/pruebatecnica/accountservice/infrastructure/persistence/repository/AccountPersistenceTest.class
+com/pruebatecnica/accountservice/infrastructure/rest/ReporteControllerTest.class
+com/pruebatecnica/accountservice/application/service/MovimientoServiceImplTest.class
+com/pruebatecnica/accountservice/infrastructure/messaging/listener/CustomerEventListenerTest.class
+com/pruebatecnica/accountservice/infrastructure/rest/MovimientoControllerTest.class

@@ -1,0 +1,5 @@
+/media/christopher/CHRISDDE1/prueba_tecnica_backend/account-service/src/test/java/com/pruebatecnica/accountservice/application/service/MovimientoServiceImplTest.java
+/media/christopher/CHRISDDE1/prueba_tecnica_backend/account-service/src/test/java/com/pruebatecnica/accountservice/infrastructure/messaging/listener/CustomerEventListenerTest.java
+/media/christopher/CHRISDDE1/prueba_tecnica_backend/account-service/src/test/java/com/pruebatecnica/accountservice/infrastructure/persistence/repository/AccountPersistenceTest.java
+/media/christopher/CHRISDDE1/prueba_tecnica_backend/account-service/src/test/java/com/pruebatecnica/accountservice/infrastructure/rest/MovimientoControllerTest.java
+/media/christopher/CHRISDDE1/prueba_tecnica_backend/account-service/src/test/java/com/pruebatecnica/accountservice/infrastructure/rest/ReporteControllerTest.java
