@@ -14,6 +14,7 @@ public class Cuenta {
     private BigDecimal saldoDisponible;
     private boolean estado;
     private String clienteId;
+    private Long version;
 
     private Cuenta(
             Long id,
@@ -22,7 +23,8 @@ public class Cuenta {
             BigDecimal saldoInicial,
             BigDecimal saldoDisponible,
             boolean estado,
-            String clienteId
+            String clienteId,
+            Long version
     ) {
         validarObligatorio(numeroCuenta, "El número de cuenta es obligatorio");
         validarObligatorio(tipoCuenta, "El tipo de cuenta es obligatorio");
@@ -38,10 +40,11 @@ public class Cuenta {
         this.saldoDisponible = saldoDisponible;
         this.estado = estado;
         this.clienteId = clienteId.trim();
+        this.version = version;
     }
 
     public static Cuenta crear(String numeroCuenta, String tipoCuenta, BigDecimal saldoInicial, String clienteId) {
-        return new Cuenta(null, numeroCuenta, tipoCuenta, saldoInicial, saldoInicial, true, clienteId);
+        return new Cuenta(null, numeroCuenta, tipoCuenta, saldoInicial, saldoInicial, true, clienteId, null);
     }
 
     public static Cuenta reconstruir(
@@ -51,9 +54,10 @@ public class Cuenta {
             BigDecimal saldoInicial,
             BigDecimal saldoDisponible,
             boolean estado,
-            String clienteId
+            String clienteId,
+            Long version
     ) {
-        return new Cuenta(id, numeroCuenta, tipoCuenta, saldoInicial, saldoDisponible, estado, clienteId);
+        return new Cuenta(id, numeroCuenta, tipoCuenta, saldoInicial, saldoDisponible, estado, clienteId, version);
     }
 
     public void actualizarDatos(String tipoCuenta) {
@@ -130,5 +134,9 @@ public class Cuenta {
 
     public String getClienteId() {
         return clienteId;
+    }
+
+    public Long getVersion() {
+        return version;
     }
 }

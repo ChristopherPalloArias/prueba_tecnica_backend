@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 class CustomerEventListenerTest {
 
@@ -28,5 +29,23 @@ class CustomerEventListenerTest {
         ));
 
         verify(clienteReplicaService).upsert("CLI-001", "Jose Lema", "1234567890", false);
+    }
+
+    @Test
+    void handleDebeIgnorarEventoDesconocidoSinActualizarReplica() {
+        ClienteReplicaService clienteReplicaService = mock(ClienteReplicaService.class);
+        CustomerEventListener listener = new CustomerEventListener(clienteReplicaService);
+
+        listener.handle(new CustomerEventPayload(
+                UUID.randomUUID(),
+                "CUSTOMER_PASSWORD_CHANGED",
+                LocalDateTime.now(),
+                "CLI-001",
+                "Jose Lema",
+                "1234567890",
+                true
+        ));
+
+        verifyNoInteractions(clienteReplicaService);
     }
 }

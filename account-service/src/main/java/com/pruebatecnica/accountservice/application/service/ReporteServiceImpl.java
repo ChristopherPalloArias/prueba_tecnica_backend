@@ -57,7 +57,8 @@ public class ReporteServiceImpl implements ReporteService {
         Map<Long, Cuenta> cuentasPorId = cuentas.stream()
                 .collect(Collectors.toMap(Cuenta::getId, cuenta -> cuenta));
 
-        List<Movimiento> movimientos = movimientoRepository.findByCuentaIdsAndFechaBetween(
+        // El reporte del reto considera solo movimientos activos por defecto.
+        List<Movimiento> movimientos = movimientoRepository.findActiveByCuentaIdsAndFechaBetween(
                 cuentaIds,
                 fechaInicio.atStartOfDay(),
                 fechaFin.atTime(LocalTime.MAX)

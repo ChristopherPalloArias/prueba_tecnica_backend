@@ -16,5 +16,5 @@ public interface MovimientoRepositoryPort {
 
     Optional<Movimiento> findById(Long id);
 
-    List<Movimiento> findByCuentaIdsAndFechaBetween(List<Long> cuentaIds, LocalDateTime fechaInicio, LocalDateTime fechaFin);
+    List<Movimiento> findActiveByCuentaIdsAndFechaBetween(List<Long> cuentaIds, LocalDateTime fechaInicio, LocalDateTime fechaFin);
 }

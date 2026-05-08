@@ -13,17 +13,18 @@ CREATE TABLE cuentas (
     id BIGSERIAL PRIMARY KEY,
     numero_cuenta VARCHAR(50) NOT NULL UNIQUE,
     tipo_cuenta VARCHAR(30) NOT NULL,
-    saldo_inicial NUMERIC(19, 2) NOT NULL,
-    saldo_disponible NUMERIC(19, 2) NOT NULL,
+    saldo_inicial NUMERIC(19, 2) NOT NULL CHECK (saldo_inicial >= 0),
+    saldo_disponible NUMERIC(19, 2) NOT NULL CHECK (saldo_disponible >= 0),
     estado BOOLEAN NOT NULL,
-    cliente_id VARCHAR(50) NOT NULL
+    cliente_id VARCHAR(50) NOT NULL,
+    version BIGINT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE movimientos (
     id BIGSERIAL PRIMARY KEY,
     fecha TIMESTAMP NOT NULL,
     tipo_movimiento VARCHAR(20) NOT NULL,
-    valor NUMERIC(19, 2) NOT NULL,
+    valor NUMERIC(19, 2) NOT NULL CHECK (valor <> 0),
     saldo NUMERIC(19, 2) NOT NULL,
     estado BOOLEAN NOT NULL,
     cuenta_id BIGINT NOT NULL,

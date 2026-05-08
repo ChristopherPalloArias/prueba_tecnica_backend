@@ -49,8 +49,8 @@ public class MovimientoRepositoryAdapter implements MovimientoRepositoryPort {
     }
 
     @Override
-    public List<Movimiento> findByCuentaIdsAndFechaBetween(List<Long> cuentaIds, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
-        return movimientoJpaRepository.findByCuenta_IdInAndFechaBetweenOrderByFechaAsc(cuentaIds, fechaInicio, fechaFin)
+    public List<Movimiento> findActiveByCuentaIdsAndFechaBetween(List<Long> cuentaIds, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+        return movimientoJpaRepository.findByCuenta_IdInAndEstadoTrueAndFechaBetweenOrderByFechaAsc(cuentaIds, fechaInicio, fechaFin)
                 .stream()
                 .map(movimientoMapper::toDomain)
                 .toList();

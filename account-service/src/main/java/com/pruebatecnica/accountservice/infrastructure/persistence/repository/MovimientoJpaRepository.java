@@ -10,7 +10,7 @@ public interface MovimientoJpaRepository extends JpaRepository<MovimientoEntity,
 
     List<MovimientoEntity> findByEstadoTrue();
 
-    List<MovimientoEntity> findByCuenta_IdInAndFechaBetweenOrderByFechaAsc(
+    List<MovimientoEntity> findByCuenta_IdInAndEstadoTrueAndFechaBetweenOrderByFechaAsc(
             List<Long> cuentaIds,
             LocalDateTime fechaInicio,
             LocalDateTime fechaFin

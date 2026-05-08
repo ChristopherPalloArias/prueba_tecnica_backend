@@ -15,7 +15,8 @@ public class CuentaMapper {
                 entity.getSaldoInicial(),
                 entity.getSaldoDisponible(),
                 Boolean.TRUE.equals(entity.getEstado()),
-                entity.getClienteId()
+                entity.getClienteId(),
+                entity.getVersion()
         );
     }
 
@@ -28,6 +29,7 @@ public class CuentaMapper {
         entity.setSaldoDisponible(cuenta.getSaldoDisponible());
         entity.setEstado(cuenta.isEstado());
         entity.setClienteId(cuenta.getClienteId());
+        entity.setVersion(cuenta.getVersion());
         return entity;
     }
 }

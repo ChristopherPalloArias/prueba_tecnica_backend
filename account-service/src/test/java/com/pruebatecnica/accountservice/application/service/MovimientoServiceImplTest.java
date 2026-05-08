@@ -3,6 +3,7 @@ package com.pruebatecnica.accountservice.application.service;
 import com.pruebatecnica.accountservice.application.dto.MovimientoCreateRequest;
 import com.pruebatecnica.accountservice.application.dto.MovimientoResponse;
 import com.pruebatecnica.accountservice.domain.exception.BusinessException;
+import com.pruebatecnica.accountservice.domain.exception.DomainException;
 import com.pruebatecnica.accountservice.domain.model.Cuenta;
 import com.pruebatecnica.accountservice.domain.model.Movimiento;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,8 @@ class MovimientoServiceImplTest {
                 new BigDecimal("1000.00"),
                 new BigDecimal("1000.00"),
                 true,
-                "CLI-001"
+                "CLI-001",
+                0L
         );
         when(cuentaRepository.findById(1L)).thenReturn(Optional.of(cuenta));
         when(cuentaRepository.save(any(Cuenta.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -68,7 +70,8 @@ class MovimientoServiceImplTest {
                 new BigDecimal("100.00"),
                 new BigDecimal("100.00"),
                 true,
-                "CLI-001"
+                "CLI-001",
+                0L
         );
         when(cuentaRepository.findById(1L)).thenReturn(Optional.of(cuenta));
 
@@ -78,6 +81,54 @@ class MovimientoServiceImplTest {
         );
 
         assertEquals("Saldo no disponible", exception.getMessage());
+        verify(cuentaRepository, never()).save(any(Cuenta.class));
+        verify(movimientoRepository, never()).save(any(Movimiento.class));
+    }
+
+    @Test
+    void createDebeRechazarMovimientoSobreCuentaInactiva() {
+        Cuenta cuenta = Cuenta.reconstruir(
+                1L,
+                "478758",
+                "Ahorro",
+                new BigDecimal("100.00"),
+                new BigDecimal("100.00"),
+                false,
+                "CLI-001",
+                0L
+        );
+        when(cuentaRepository.findById(1L)).thenReturn(Optional.of(cuenta));
+
+        BusinessException exception = assertThrows(
+                BusinessException.class,
+                () -> movimientoService.create(new MovimientoCreateRequest(1L, new BigDecimal("50.00")))
+        );
+
+        assertEquals("Cuenta inactiva", exception.getMessage());
+        verify(cuentaRepository, never()).save(any(Cuenta.class));
+        verify(movimientoRepository, never()).save(any(Movimiento.class));
+    }
+
+    @Test
+    void createDebeRechazarMovimientoConValorCero() {
+        Cuenta cuenta = Cuenta.reconstruir(
+                1L,
+                "478758",
+                "Ahorro",
+                new BigDecimal("100.00"),
+                new BigDecimal("100.00"),
+                true,
+                "CLI-001",
+                0L
+        );
+        when(cuentaRepository.findById(1L)).thenReturn(Optional.of(cuenta));
+
+        DomainException exception = assertThrows(
+                DomainException.class,
+                () -> movimientoService.create(new MovimientoCreateRequest(1L, BigDecimal.ZERO))
+        );
+
+        assertEquals("El valor del movimiento no puede ser cero", exception.getMessage());
         verify(cuentaRepository, never()).save(any(Cuenta.class));
         verify(movimientoRepository, never()).save(any(Movimiento.class));
     }
