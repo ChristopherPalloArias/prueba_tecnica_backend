@@ -2,7 +2,7 @@
   "info": {
     "name": "Prueba Tecnica Backend",
     "_postman_id": "f3a58d7d-821d-4a85-9bd7-8cf1da4d0a01",
-    "description": "Coleccion para probar customer-service y account-service de la prueba tecnica backend.",
+    "description": "Coleccion para probar customer-service y account-service. Use primero la carpeta \"Flujo recomendado\". La creacion de cuenta depende de la replica asincrona del cliente mediante RabbitMQ; si la cuenta falla por cliente no encontrado, espere unos segundos y reintente.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -41,7 +41,258 @@
   ],
   "item": [
     {
-      "name": "Clientes",
+      "name": "Flujo recomendado",
+      "description": "Ejecutar primero esta carpeta para validar el flujo principal del reto. Despues de crear el cliente, esperar unos segundos antes de crear la cuenta para permitir la propagacion asincrona del evento por RabbitMQ hacia account-service.",
+      "item": [
+        {
+          "name": "Crear cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('clienteId', data.clienteId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"Masculino\",\n  \"edad\": 32,\n  \"identificacion\": \"1234567890\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"0999999999\",\n  \"contrasena\": \"Temporal123\"\n}"
+            },
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener cliente por clienteId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear cuenta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('cuentaId', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"{{numeroCuenta}}\",\n  \"tipoCuenta\": \"Ahorro\",\n  \"saldoInicial\": 2000.00,\n  \"clienteId\": \"{{clienteId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear deposito",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('movimientoId', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"valor\": 500.00\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear retiro valido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  pm.collectionVariables.set('movimientoId', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"valor\": -575.00\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear retiro sin saldo suficiente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"valor\": -999999.00\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/movimientos",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar reporte por cliente y rango de fechas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/reportes?clienteId={{clienteId}}&fechaInicio={{fechaInicio}}&fechaFin={{fechaFin}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "clienteId",
+                  "value": "{{clienteId}}"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "{{fechaInicio}}"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "{{fechaFin}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clientes - CRUD completo",
+      "description": "Operaciones principales de clientes. Los cambios de estado y deletes logicos estan en Operaciones de mantenimiento para no romper el flujo recomendado.",
       "item": [
         {
           "name": "Crear cliente",
@@ -140,55 +391,12 @@
               ]
             }
           }
-        },
-        {
-          "name": "Cambiar estado cliente",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"estado\": true\n}"
-            },
-            "url": {
-              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}/estado",
-              "host": [
-                "{{customerBaseUrl}}"
-              ],
-              "path": [
-                "clientes",
-                "{{clienteId}}",
-                "estado"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Borrar logico cliente",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}",
-              "host": [
-                "{{customerBaseUrl}}"
-              ],
-              "path": [
-                "clientes",
-                "{{clienteId}}"
-              ]
-            }
-          }
         }
       ]
     },
     {
-      "name": "Cuentas",
+      "name": "Cuentas - CRUD completo",
+      "description": "Operaciones principales de cuentas. Los cambios de estado y deletes logicos estan en Operaciones de mantenimiento para no romper el flujo recomendado.",
       "item": [
         {
           "name": "Crear cuenta",
@@ -287,55 +495,12 @@
               ]
             }
           }
-        },
-        {
-          "name": "Cambiar estado cuenta",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"estado\": true\n}"
-            },
-            "url": {
-              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}/estado",
-              "host": [
-                "{{accountBaseUrl}}"
-              ],
-              "path": [
-                "cuentas",
-                "{{cuentaId}}",
-                "estado"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Borrar logico cuenta",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}",
-              "host": [
-                "{{accountBaseUrl}}"
-              ],
-              "path": [
-                "cuentas",
-                "{{cuentaId}}"
-              ]
-            }
-          }
         }
       ]
     },
     {
-      "name": "Movimientos",
+      "name": "Movimientos - CRUD controlado",
+      "description": "Registro y consulta de movimientos. PUT solo actualiza metadata para preservar trazabilidad financiera.",
       "item": [
         {
           "name": "Crear deposito",
@@ -498,6 +663,100 @@
               ]
             }
           }
+        }
+      ]
+    },
+    {
+      "name": "Operaciones de mantenimiento",
+      "description": "Ejecutar al final o de forma puntual. Estas operaciones cambian estado o realizan deletes logicos y pueden afectar el flujo recomendado.",
+      "item": [
+        {
+          "name": "Cambiar estado cliente",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}/estado",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}",
+                "estado"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Borrar logico cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{customerBaseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{customerBaseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cambiar estado cuenta",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}/estado",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}",
+                "estado"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Borrar logico cuenta",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{accountBaseUrl}}/cuentas/{{cuentaId}}",
+              "host": [
+                "{{accountBaseUrl}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}"
+              ]
+            }
+          }
         },
         {
           "name": "Cambiar estado movimiento",
@@ -539,41 +798,6 @@
               "path": [
                 "movimientos",
                 "{{movimientoId}}"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Reportes",
-      "item": [
-        {
-          "name": "Consultar reporte por cliente y rango de fechas",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{accountBaseUrl}}/reportes?clienteId={{clienteId}}&fechaInicio={{fechaInicio}}&fechaFin={{fechaFin}}",
-              "host": [
-                "{{accountBaseUrl}}"
-              ],
-              "path": [
-                "reportes"
-              ],
-              "query": [
-                {
-                  "key": "clienteId",
-                  "value": "{{clienteId}}"
-                },
-                {
-                  "key": "fechaInicio",
-                  "value": "{{fechaInicio}}"
-                },
-                {
-                  "key": "fechaFin",
-                  "value": "{{fechaFin}}"
-                }
               ]
             }
           }

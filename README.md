@@ -75,6 +75,8 @@ Esto mantiene aislado el modelo de datos de cada servicio y es coherente con la 
 
 ## Orden recomendado de prueba
 
+Importar la coleccion Postman y ejecutar primero la carpeta `Flujo recomendado`.
+
 1. Crear cliente en `POST /clientes`.
 2. Esperar unos segundos para que RabbitMQ replique el cliente en `account-service`.
 3. Crear cuenta en `POST /cuentas`.
@@ -88,6 +90,10 @@ La coleccion Postman esta en:
 ```text
 postman/PruebaTecnicaBackend.postman_collection.json
 ```
+
+La creacion de cuenta usa consistencia eventual: `customer-service` publica el evento del cliente por RabbitMQ y `account-service` lo consume para actualizar `ClienteReplica`; si se prueba demasiado rapido, basta esperar unos segundos y reintentar la creacion de cuenta.
+
+Las operaciones de cambio de estado y deletes logicos estan separadas en la carpeta `Operaciones de mantenimiento` para no romper el flujo principal de prueba.
 
 ## Endpoints principales
 
