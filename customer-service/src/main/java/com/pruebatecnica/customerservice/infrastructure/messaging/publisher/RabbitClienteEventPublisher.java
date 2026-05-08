@@ -43,9 +43,9 @@ public class RabbitClienteEventPublisher implements ClienteEventPublisher {
     @Override
     public void publishCreated(Cliente cliente) {
         CustomerCreatedEvent event = new CustomerCreatedEvent(
-                UUID.randomUUID(),
+                newEventId(),
                 CustomerEventType.CUSTOMER_CREATED,
-                LocalDateTime.now(),
+                occurredAt(),
                 cliente.getClienteId(),
                 cliente.getNombre(),
                 cliente.getIdentificacion(),
@@ -57,9 +57,9 @@ public class RabbitClienteEventPublisher implements ClienteEventPublisher {
     @Override
     public void publishUpdated(Cliente cliente) {
         CustomerUpdatedEvent event = new CustomerUpdatedEvent(
-                UUID.randomUUID(),
+                newEventId(),
                 CustomerEventType.CUSTOMER_UPDATED,
-                LocalDateTime.now(),
+                occurredAt(),
                 cliente.getClienteId(),
                 cliente.getNombre(),
                 cliente.getIdentificacion(),
@@ -71,9 +71,9 @@ public class RabbitClienteEventPublisher implements ClienteEventPublisher {
     @Override
     public void publishStatusChanged(Cliente cliente) {
         CustomerStatusChangedEvent event = new CustomerStatusChangedEvent(
-                UUID.randomUUID(),
+                newEventId(),
                 CustomerEventType.CUSTOMER_STATUS_CHANGED,
-                LocalDateTime.now(),
+                occurredAt(),
                 cliente.getClienteId(),
                 cliente.getNombre(),
                 cliente.getIdentificacion(),
@@ -85,14 +85,22 @@ public class RabbitClienteEventPublisher implements ClienteEventPublisher {
     @Override
     public void publishDeleted(Cliente cliente) {
         CustomerDeletedEvent event = new CustomerDeletedEvent(
-                UUID.randomUUID(),
+                newEventId(),
                 CustomerEventType.CUSTOMER_DELETED,
-                LocalDateTime.now(),
+                occurredAt(),
                 cliente.getClienteId(),
                 cliente.getNombre(),
                 cliente.getIdentificacion(),
                 cliente.isEstado()
         );
         rabbitTemplate.convertAndSend(exchange, deletedRoutingKey, event);
+    }
+
+    private UUID newEventId() {
+        return UUID.randomUUID();
+    }
+
+    private LocalDateTime occurredAt() {
+        return LocalDateTime.now();
     }
 }

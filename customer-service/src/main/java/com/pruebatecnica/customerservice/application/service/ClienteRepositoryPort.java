@@ -11,6 +11,8 @@ public interface ClienteRepositoryPort {
 
     List<Cliente> findAll();
 
+    List<Cliente> findAllActive();
+
     Optional<Cliente> findByClienteId(String clienteId);
 
     boolean existsByClienteId(String clienteId);

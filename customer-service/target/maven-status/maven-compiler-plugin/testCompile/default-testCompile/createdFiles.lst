@@ -1,2 +1,4 @@
 com/pruebatecnica/customerservice/domain/model/ClienteTest.class
+com/pruebatecnica/customerservice/infrastructure/persistence/repository/ClienteJpaRepositoryTest.class
+com/pruebatecnica/customerservice/application/service/ClienteServiceImplTest.class
 com/pruebatecnica/customerservice/infrastructure/rest/ClienteControllerTest.class

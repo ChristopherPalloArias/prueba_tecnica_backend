@@ -1,2 +1,4 @@
+/media/christopher/CHRISDDE1/prueba_tecnica_backend/customer-service/src/test/java/com/pruebatecnica/customerservice/application/service/ClienteServiceImplTest.java
 /media/christopher/CHRISDDE1/prueba_tecnica_backend/customer-service/src/test/java/com/pruebatecnica/customerservice/domain/model/ClienteTest.java
+/media/christopher/CHRISDDE1/prueba_tecnica_backend/customer-service/src/test/java/com/pruebatecnica/customerservice/infrastructure/persistence/repository/ClienteJpaRepositoryTest.java
 /media/christopher/CHRISDDE1/prueba_tecnica_backend/customer-service/src/test/java/com/pruebatecnica/customerservice/infrastructure/rest/ClienteControllerTest.java

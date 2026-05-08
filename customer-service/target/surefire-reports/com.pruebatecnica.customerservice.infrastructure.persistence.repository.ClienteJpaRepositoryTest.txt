@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.pruebatecnica.customerservice.infrastructure.persistence.repository.ClienteJpaRepositoryTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.487 s -- in com.pruebatecnica.customerservice.infrastructure.persistence.repository.ClienteJpaRepositoryTest

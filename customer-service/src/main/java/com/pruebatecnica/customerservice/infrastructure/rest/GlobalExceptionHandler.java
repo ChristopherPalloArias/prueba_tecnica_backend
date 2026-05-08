@@ -1,10 +1,11 @@
 package com.pruebatecnica.customerservice.infrastructure.rest;
 
-import com.pruebatecnica.customerservice.application.dto.ErrorResponse;
 import com.pruebatecnica.customerservice.domain.exception.ClienteNotFoundException;
 import com.pruebatecnica.customerservice.domain.exception.DomainException;
 import com.pruebatecnica.customerservice.domain.exception.DuplicateClienteException;
+import com.pruebatecnica.customerservice.infrastructure.rest.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,6 +46,18 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
         return buildResponse(HttpStatus.CONFLICT, exception.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrity(
+            DataIntegrityViolationException exception,
+            HttpServletRequest request
+    ) {
+        return buildResponse(
+                HttpStatus.CONFLICT,
+                "No se pudo guardar el cliente porque ya existe un valor único registrado",
+                request.getRequestURI()
+        );
     }
 
     @ExceptionHandler(DomainException.class)

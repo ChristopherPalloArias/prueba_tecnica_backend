@@ -33,6 +33,14 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     }
 
     @Override
+    public List<Cliente> findAllActive() {
+        return clienteJpaRepository.findByEstadoTrue()
+                .stream()
+                .map(clienteMapper::toDomain)
+                .toList();
+    }
+
+    @Override
     public Optional<Cliente> findByClienteId(String clienteId) {
         return clienteJpaRepository.findByClienteId(clienteId)
                 .map(clienteMapper::toDomain);

@@ -1,4 +1,4 @@
-package com.pruebatecnica.customerservice.application.dto;
+package com.pruebatecnica.customerservice.infrastructure.rest.dto;
 
 import java.time.LocalDateTime;
 

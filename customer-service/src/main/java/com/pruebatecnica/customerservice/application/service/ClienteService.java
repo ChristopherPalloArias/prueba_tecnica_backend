@@ -11,7 +11,7 @@ public interface ClienteService {
 
     ClienteResponse create(ClienteCreateRequest request);
 
-    List<ClienteResponse> findAll();
+    List<ClienteResponse> findAll(boolean incluirInactivos);
 
     ClienteResponse findByClienteId(String clienteId);
 
